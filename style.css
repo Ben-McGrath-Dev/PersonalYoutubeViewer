@@ -9,7 +9,7 @@ body {
     min-height: 100vh;
 
     background: #101010;
-    color: #eeeeee;
+    color: #eee;
 
     font-family:
         Arial,
@@ -19,7 +19,7 @@ body {
 
 
 .app {
-    width: min(1000px, 94%);
+    width: min(1100px, 94%);
 
     margin: 40px auto;
 }
@@ -31,20 +31,28 @@ header {
 
 
 h1 {
-    margin: 0;
+    margin: 0 0 8px;
 
     font-size: 32px;
 }
 
 
-.subtitle {
-    margin-top: 8px;
+header p {
+    margin: 0;
 
     color: #888;
 }
 
 
-.controls {
+.download-box {
+    padding: 20px;
+
+    background: #191919;
+
+    border: 1px solid #303030;
+
+    border-radius: 9px;
+
     margin-bottom: 20px;
 }
 
@@ -52,53 +60,52 @@ h1 {
 label {
     display: block;
 
-    margin-bottom: 8px;
+    margin: 12px 0 7px;
 
     font-weight: bold;
 }
 
 
-.input-row {
-    display: flex;
-
-    gap: 10px;
+label:first-child {
+    margin-top: 0;
 }
 
 
-input[type="text"] {
-    flex: 1;
+input {
+    width: 100%;
 
-    min-width: 0;
+    padding: 13px 14px;
 
-    padding: 13px 15px;
+    background: #101010;
 
-    background: #1d1d1d;
     color: white;
 
     border: 1px solid #3a3a3a;
+
     border-radius: 7px;
 
     outline: none;
 
-    font-size: 16px;
+    font-size: 15px;
 }
 
 
-input[type="text"]:focus {
+input:focus {
     border-color: #666;
 }
 
 
 button {
-    padding: 12px 22px;
+    padding: 11px 18px;
 
-    border: none;
+    border: 0;
+
     border-radius: 7px;
 
-    background: #eeeeee;
+    background: #eee;
+
     color: #111;
 
-    font-size: 15px;
     font-weight: bold;
 
     cursor: pointer;
@@ -106,63 +113,34 @@ button {
 
 
 button:hover {
-    opacity: 0.85;
+    opacity: .85;
 }
 
 
 button:disabled {
-    opacity: 0.45;
+    opacity: .4;
 
     cursor: not-allowed;
 }
 
 
-.action-row {
+#downloadButton {
+    width: 100%;
+
+    margin-top: 16px;
+}
+
+
+#status {
     margin-top: 12px;
-}
 
-
-button.secondary {
-    background: #292929;
-    color: #eee;
-
-    border: 1px solid #444;
-}
-
-
-.status-panel {
-    padding: 15px;
-
-    margin-bottom: 20px;
-
-    background: #191919;
-
-    border: 1px solid #2d2d2d;
-    border-radius: 8px;
-}
-
-
-.status-row {
-    display: flex;
-
-    justify-content: space-between;
-
-    gap: 20px;
-
-    padding: 6px 0;
-
-    color: #aaa;
-}
-
-
-.status-row span:last-child {
-    color: #eee;
+    color: #999;
 
     font-family: monospace;
 }
 
 
-.player-container {
+.player-section {
     position: relative;
 
     width: 100%;
@@ -171,23 +149,25 @@ button.secondary {
 
     background: #000;
 
-    border-radius: 8px;
+    border-radius: 9px;
 
     overflow: hidden;
+
+    margin-bottom: 30px;
 }
 
 
-video {
+#player {
     width: 100%;
     height: 100%;
 
     display: none;
 
-    background: black;
+    background: #000;
 }
 
 
-.placeholder {
+#placeholder {
     position: absolute;
 
     inset: 0;
@@ -197,41 +177,160 @@ video {
     align-items: center;
     justify-content: center;
 
+    color: #444;
+}
+
+
+.library-section {
+    margin-top: 20px;
+}
+
+
+.library-header {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    margin-bottom: 15px;
+}
+
+
+.library-header h2 {
+    margin: 0;
+}
+
+
+.small-button {
+    padding: 8px 13px;
+
+    background: #292929;
+
+    color: #eee;
+
+    border: 1px solid #444;
+}
+
+
+#library {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+}
+
+
+.video-card {
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    gap: 20px;
+
+    padding: 15px;
+
+    background: #191919;
+
+    border: 1px solid #2d2d2d;
+
+    border-radius: 8px;
+}
+
+
+.video-information {
+    min-width: 0;
+}
+
+
+.video-title {
+    font-weight: bold;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+
+    white-space: nowrap;
+}
+
+
+.video-id {
+    margin-top: 5px;
+
+    color: #666;
+
+    font-family: monospace;
+
+    font-size: 13px;
+}
+
+
+.video-actions {
+    display: flex;
+
+    gap: 7px;
+
+    flex-shrink: 0;
+}
+
+
+.video-actions button {
+    padding: 8px 12px;
+}
+
+
+button.secondary {
+    background: #292929;
+
+    color: #eee;
+
+    border: 1px solid #444;
+}
+
+
+button.danger {
+    background: #3a1d1d;
+
+    color: #ffb0b0;
+
+    border: 1px solid #5a2929;
+}
+
+
+.empty {
+    padding: 30px;
+
+    text-align: center;
+
     color: #555;
 
-    font-size: 18px;
+    background: #151515;
+
+    border-radius: 8px;
 }
 
 
-.info {
-    margin-top: 20px;
+@media (max-width: 700px) {
 
-    color: #777;
+    .video-card {
+        align-items: flex-start;
 
-    font-size: 14px;
-}
-
-
-code {
-    padding: 2px 5px;
-
-    background: #1c1c1c;
-
-    border-radius: 4px;
-
-    color: #aaa;
-}
-
-
-@media (max-width: 600px) {
-
-    .input-row {
         flex-direction: column;
     }
 
-    button {
+
+    .video-actions {
         width: 100%;
     }
+
+
+    .video-actions button {
+        flex: 1;
+    }
+
 
     h1 {
         font-size: 25px;
