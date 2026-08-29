@@ -19,7 +19,6 @@
 
 </head>
 
-
 <body>
 
 <main class="app">
@@ -28,125 +27,87 @@
 
         <h1>Personal YouTube Viewer</h1>
 
-        <p class="subtitle">
-            Local video downloader and player
+        <p>
+            Private local video library
         </p>
 
     </header>
 
 
-    <section class="controls">
+    <section class="download-box">
 
         <label for="videoId">
             YouTube Video ID
         </label>
 
-
-        <div class="input-row">
-
-            <input
-                id="videoId"
-                type="text"
-                maxlength="11"
-                placeholder="Enter 11-character video ID"
-                autocomplete="off"
-                spellcheck="false"
-            >
+        <input
+            id="videoId"
+            maxlength="11"
+            placeholder="Enter video ID"
+            autocomplete="off"
+        >
 
 
-            <button id="downloadButton">
-                Download & Play
-            </button>
+        <label for="filename">
+            Local filename
+        </label>
 
+        <input
+            id="filename"
+            placeholder="My Video.mp4"
+            autocomplete="off"
+        >
+
+
+        <button
+            id="downloadButton"
+        >
+            Download & Play
+        </button>
+
+
+        <div id="status">
+            Ready
         </div>
 
     </section>
 
 
-    <section class="status-panel">
-
-        <div class="status-row">
-
-            <span>Status</span>
-
-            <span id="status">
-                Ready
-            </span>
-
-        </div>
-
-
-        <div class="status-row">
-
-            <span>Video ID</span>
-
-            <span id="displayId">
-                —
-            </span>
-
-        </div>
-
-
-        <div class="status-row">
-
-            <span>Title</span>
-
-            <span id="displayTitle">
-                —
-            </span>
-
-        </div>
-
-
-        <div class="status-row">
-
-            <span>Uploader</span>
-
-            <span id="displayUploader">
-                —
-            </span>
-
-        </div>
-
-
-        <div class="status-row">
-
-            <span>File</span>
-
-            <span id="displayFile">
-                —
-            </span>
-
-        </div>
-
-    </section>
-
-
-    <section class="player-container">
+    <section class="player-section">
 
         <video
-            id="videoPlayer"
+            id="player"
             controls
             preload="metadata"
         ></video>
 
 
-        <div
-            id="placeholder"
-            class="placeholder"
-        >
-            No video loaded
+        <div id="placeholder">
+            No video selected
         </div>
 
     </section>
 
 
-    <section class="info">
+    <section class="library-section">
 
-        <p>
-            Downloads are stored locally in
-            <code>videos/</code>.
-        </p>
+        <div class="library-header">
+
+            <h2>Library</h2>
+
+            <button
+                id="refreshButton"
+                class="small-button"
+            >
+                Refresh
+            </button>
+
+        </div>
+
+
+        <div id="library">
+            Loading library...
+        </div>
 
     </section>
 
