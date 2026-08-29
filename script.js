@@ -1,34 +1,31 @@
 const videoIdInput =
     document.getElementById("videoId");
 
+const filenameInput =
+    document.getElementById("filename");
+
 const downloadButton =
     document.getElementById("downloadButton");
+
+const refreshButton =
+    document.getElementById("refreshButton");
 
 const statusElement =
     document.getElementById("status");
 
-const displayId =
-    document.getElementById("displayId");
-
-const displayTitle =
-    document.getElementById("displayTitle");
-
-const displayUploader =
-    document.getElementById("displayUploader");
-
-const displayFile =
-    document.getElementById("displayFile");
-
-const videoPlayer =
-    document.getElementById("videoPlayer");
+const player =
+    document.getElementById("player");
 
 const placeholder =
     document.getElementById("placeholder");
 
+const libraryElement =
+    document.getElementById("library");
 
-function getVideoId() {
 
-    return videoIdInput.value.trim();
+function setStatus(message) {
+
+    statusElement.textContent = message;
 
 }
 
@@ -40,34 +37,34 @@ function validVideoId(id) {
 }
 
 
-function setStatus(text) {
+function playVideo(entry) {
 
-    statusElement.textContent = text;
+    videoIdInput.value = entry.id;
 
-}
+    filenameInput.value =
+        entry.filename;
 
+    player.src =
+        `/videos/${encodeURIComponent(entry.filename)}`;
 
-function playVideo(id, filename) {
-
-    const url =
-        `/videos/${encodeURIComponent(filename)}`;
-
-    videoPlayer.src = url;
-
-    videoPlayer.style.display = "block";
+    player.style.display = "block";
 
     placeholder.style.display = "none";
 
-    videoPlayer.load();
+    player.load();
+
+    player.play().catch(() => {});
 
 }
 
 
 async function downloadVideo() {
 
-    const id = getVideoId();
+    const id =
+        videoIdInput.value.trim();
 
-    displayId.textContent = id || "—";
+    const filename =
+        filenameInput.value.trim();
 
 
     if (!validVideoId(id)) {
@@ -81,59 +78,23 @@ async function downloadVideo() {
     }
 
 
+    if (!filename) {
+
+        setStatus(
+            "Enter a filename."
+        );
+
+        return;
+
+    }
+
+
     downloadButton.disabled = true;
 
-    setStatus("Checking...");
-
-    displayTitle.textContent = "—";
-    displayUploader.textContent = "—";
-    displayFile.textContent = "—";
+    setStatus("Starting download...");
 
 
     try {
-
-        // Check whether we already have the video.
-
-        const checkResponse =
-            await fetch(
-                `/api/check/${encodeURIComponent(id)}`
-            );
-
-        const checkData =
-            await checkResponse.json();
-
-
-        if (!checkResponse.ok) {
-
-            throw new Error(
-                checkData.error ||
-                "Could not check video."
-            );
-
-        }
-
-
-        if (checkData.exists) {
-
-            setStatus("Already downloaded");
-
-            displayFile.textContent =
-                checkData.filename;
-
-            playVideo(
-                id,
-                checkData.filename
-            );
-
-            return;
-
-        }
-
-
-        // Tell Python to download it.
-
-        setStatus("Downloading...");
-
 
         const response =
             await fetch("/api/download", {
@@ -146,7 +107,8 @@ async function downloadVideo() {
                 },
 
                 body: JSON.stringify({
-                    video_id: id
+                    id: id,
+                    filename: filename
                 })
 
             });
@@ -166,23 +128,24 @@ async function downloadVideo() {
         }
 
 
-        displayTitle.textContent =
-            data.title || "—";
+        if (data.existing) {
 
-        displayUploader.textContent =
-            data.uploader || "—";
+            setStatus(
+                "Already downloaded."
+            );
 
-        displayFile.textContent =
-            data.filename || "—";
+        } else {
+
+            setStatus(
+                "Download complete."
+            );
+
+        }
 
 
-        setStatus("Download complete");
+        playVideo(data.entry);
 
-
-        playVideo(
-            id,
-            data.filename
-        );
+        await loadLibrary();
 
     }
 
@@ -205,9 +168,366 @@ async function downloadVideo() {
 }
 
 
+async function loadLibrary() {
+
+    try {
+
+        const response =
+            await fetch("/api/library");
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "Could not load library."
+            );
+
+        }
+
+
+        const library =
+            await response.json();
+
+
+        renderLibrary(library);
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        libraryElement.textContent =
+            "Could not load library.";
+
+    }
+
+}
+
+
+function renderLibrary(library) {
+
+    libraryElement.innerHTML = "";
+
+
+    if (library.length === 0) {
+
+        libraryElement.innerHTML =
+            `<div class="empty">
+                No videos downloaded yet.
+             </div>`;
+
+        return;
+
+    }
+
+
+    for (const entry of library) {
+
+        const card =
+            document.createElement("div");
+
+        card.className = "video-card";
+
+
+        const information =
+            document.createElement("div");
+
+        information.className =
+            "video-information";
+
+
+        const title =
+            document.createElement("div");
+
+        title.className = "video-title";
+
+        title.textContent =
+            entry.filename;
+
+
+        const id =
+            document.createElement("div");
+
+        id.className = "video-id";
+
+        id.textContent =
+            entry.id;
+
+
+        information.appendChild(title);
+        information.appendChild(id);
+
+
+        const actions =
+            document.createElement("div");
+
+        actions.className =
+            "video-actions";
+
+
+        const playButton =
+            document.createElement("button");
+
+        playButton.textContent = "Play";
+
+        playButton.onclick = () => {
+
+            playVideo(entry);
+
+            setStatus(
+                `Playing ${entry.filename}`
+            );
+
+        };
+
+
+        const renameButton =
+            document.createElement("button");
+
+        renameButton.textContent =
+            "Rename";
+
+        renameButton.className =
+            "secondary";
+
+
+        renameButton.onclick = async () => {
+
+            await renameVideo(entry);
+
+        };
+
+
+        const deleteButton =
+            document.createElement("button");
+
+        deleteButton.textContent =
+            "Delete";
+
+        deleteButton.className =
+            "danger";
+
+
+        deleteButton.onclick = async () => {
+
+            await deleteVideo(entry);
+
+        };
+
+
+        actions.appendChild(playButton);
+        actions.appendChild(renameButton);
+        actions.appendChild(deleteButton);
+
+
+        card.appendChild(information);
+        card.appendChild(actions);
+
+
+        libraryElement.appendChild(card);
+
+    }
+
+}
+
+
+async function renameVideo(entry) {
+
+    const newFilename =
+        prompt(
+            "Enter the new filename:",
+            entry.filename
+        );
+
+
+    if (newFilename === null) {
+        return;
+    }
+
+
+    if (!newFilename.trim()) {
+
+        setStatus(
+            "Filename cannot be empty."
+        );
+
+        return;
+
+    }
+
+
+    try {
+
+        setStatus("Renaming...");
+
+
+        const response =
+            await fetch("/api/rename", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+
+                    id: entry.id,
+
+                    filename:
+                        newFilename.trim()
+
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "Rename failed."
+            );
+
+        }
+
+
+        setStatus("Renamed.");
+
+        await loadLibrary();
+
+
+        if (
+            videoIdInput.value.trim()
+            === entry.id
+        ) {
+
+            filenameInput.value =
+                data.entry.filename;
+
+        }
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        setStatus(
+            `Rename failed: ${error.message}`
+        );
+
+    }
+
+}
+
+
+async function deleteVideo(entry) {
+
+    const confirmed =
+        confirm(
+            `Delete "${entry.filename}"?\n\n` +
+            "This only deletes the local copy."
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        setStatus("Deleting...");
+
+
+        const response =
+            await fetch("/api/delete", {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    id: entry.id
+                })
+
+            });
+
+
+        const data =
+            await response.json();
+
+
+        if (!response.ok || !data.success) {
+
+            throw new Error(
+                data.error ||
+                "Delete failed."
+            );
+
+        }
+
+
+        if (
+            videoIdInput.value.trim()
+            === entry.id
+        ) {
+
+            player.pause();
+
+            player.removeAttribute("src");
+
+            player.load();
+
+            player.style.display =
+                "none";
+
+            placeholder.style.display =
+                "flex";
+
+            filenameInput.value = "";
+
+        }
+
+
+        setStatus("Video deleted.");
+
+        await loadLibrary();
+
+    }
+
+    catch (error) {
+
+        console.error(error);
+
+        setStatus(
+            `Delete failed: ${error.message}`
+        );
+
+    }
+
+}
+
+
 downloadButton.addEventListener(
     "click",
     downloadVideo
+);
+
+
+refreshButton.addEventListener(
+    "click",
+    loadLibrary
 );
 
 
@@ -223,23 +543,38 @@ videoIdInput.addEventListener(
 );
 
 
-videoPlayer.addEventListener(
-    "loadedmetadata",
-    () => {
+filenameInput.addEventListener(
+    "keydown",
+    event => {
 
-        setStatus("Video ready");
+        if (event.key === "Enter") {
+            downloadVideo();
+        }
 
     }
 );
 
 
-videoPlayer.addEventListener(
+player.addEventListener(
+    "loadedmetadata",
+    () => {
+
+        setStatus("Video ready.");
+
+    }
+);
+
+
+player.addEventListener(
     "error",
     () => {
 
         setStatus(
-            "The downloaded video could not be played."
+            "Could not play the local video."
         );
 
     }
 );
+
+
+loadLibrary();
