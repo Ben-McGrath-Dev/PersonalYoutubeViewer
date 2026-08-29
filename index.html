@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Personal YouTube Viewer</title>
+
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
+
+</head>
+
+
+<body>
+
+<main class="app">
+
+    <header>
+
+        <h1>Personal YouTube Viewer</h1>
+
+        <p class="subtitle">
+            Local video downloader and player
+        </p>
+
+    </header>
+
+
+    <section class="controls">
+
+        <label for="videoId">
+            YouTube Video ID
+        </label>
+
+
+        <div class="input-row">
+
+            <input
+                id="videoId"
+                type="text"
+                maxlength="11"
+                placeholder="Enter 11-character video ID"
+                autocomplete="off"
+                spellcheck="false"
+            >
+
+
+            <button id="downloadButton">
+                Download & Play
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <section class="status-panel">
+
+        <div class="status-row">
+
+            <span>Status</span>
+
+            <span id="status">
+                Ready
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span>Video ID</span>
+
+            <span id="displayId">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span>Title</span>
+
+            <span id="displayTitle">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span>Uploader</span>
+
+            <span id="displayUploader">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="status-row">
+
+            <span>File</span>
+
+            <span id="displayFile">
+                —
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <section class="player-container">
+
+        <video
+            id="videoPlayer"
+            controls
+            preload="metadata"
+        ></video>
+
+
+        <div
+            id="placeholder"
+            class="placeholder"
+        >
+            No video loaded
+        </div>
+
+    </section>
+
+
+    <section class="info">
+
+        <p>
+            Downloads are stored locally in
+            <code>videos/</code>.
+        </p>
+
+    </section>
+
+</main>
+
+
+<script src="script.js"></script>
+
+</body>
+
+</html>
