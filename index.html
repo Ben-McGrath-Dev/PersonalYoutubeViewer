@@ -2,7 +2,6 @@
 <html lang="en">
 
 <head>
-
     <meta charset="UTF-8">
 
     <meta
@@ -16,7 +15,6 @@
         rel="stylesheet"
         href="style.css"
     >
-
 </head>
 
 <body>
@@ -24,27 +22,25 @@
 <main class="app">
 
     <header>
-
         <h1>Personal YouTube Viewer</h1>
 
         <p>
             Private local video library
         </p>
-
     </header>
 
 
     <section class="download-box">
 
         <label for="videoId">
-            YouTube Video ID
+            YouTube Video ID or URL
         </label>
 
         <input
             id="videoId"
-            maxlength="11"
-            placeholder="Enter video ID"
+            placeholder="Video ID or YouTube URL"
             autocomplete="off"
+            spellcheck="false"
         >
 
 
@@ -54,19 +50,31 @@
 
         <input
             id="filename"
-            placeholder="My Video.mp4"
+            placeholder="Leave blank to use the video title"
             autocomplete="off"
+            spellcheck="false"
         >
 
 
         <button
             id="downloadButton"
+            type="button"
         >
-            Download & Play
+            Download &amp; Play
         </button>
 
 
-        <div id="status">
+        <div
+            id="videoInfoPanel"
+            class="video-info-panel"
+            hidden
+        ></div>
+
+
+        <div
+            id="status"
+            aria-live="polite"
+        >
             Ready
         </div>
 
@@ -81,7 +89,6 @@
             preload="metadata"
         ></video>
 
-
         <div id="placeholder">
             No video selected
         </div>
@@ -93,11 +100,18 @@
 
         <div class="library-header">
 
-            <h2>Library</h2>
+            <div>
+                <h2>Library</h2>
+
+                <p class="library-description">
+                    Downloaded videos stored locally
+                </p>
+            </div>
 
             <button
                 id="refreshButton"
                 class="small-button"
+                type="button"
             >
                 Refresh
             </button>
@@ -114,7 +128,7 @@
 </main>
 
 
-<script src="script.js"></script>
+<script src="script.js?v=4"></script>
 
 </body>
 

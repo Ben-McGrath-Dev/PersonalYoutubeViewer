@@ -378,3 +378,359 @@ button.danger {
         flex-wrap: wrap;
     }
 }
+.download-actions {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+
+#downloadButton {
+    width: 100%;
+    margin-top: 0;
+}
+
+
+.video-info-panel {
+    margin-top: 16px;
+    padding: 15px;
+
+    background: #111;
+
+    border: 1px solid #303030;
+    border-radius: 8px;
+}
+
+
+.video-info-panel[hidden] {
+    display: none;
+}
+
+
+.info-header {
+    display: flex;
+    gap: 15px;
+    align-items: flex-start;
+}
+
+
+.video-thumbnail {
+    width: 180px;
+    max-width: 35%;
+
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+
+    background: #000;
+
+    border-radius: 6px;
+}
+
+
+.info-summary {
+    min-width: 0;
+}
+
+
+.info-title {
+    font-size: 18px;
+    font-weight: bold;
+    line-height: 1.35;
+}
+
+
+.info-uploader {
+    margin-top: 6px;
+    color: #aaa;
+}
+
+
+.info-duration {
+    margin-top: 6px;
+
+    color: #777;
+
+    font-family: monospace;
+    font-size: 13px;
+}
+
+
+.info-description {
+    margin-top: 15px;
+
+    max-height: 240px;
+    overflow-y: auto;
+
+    padding-right: 8px;
+
+    color: #bbb;
+
+    line-height: 1.5;
+    font-size: 14px;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+
+.video-uploader {
+    margin-top: 5px;
+
+    color: #999;
+
+    font-size: 14px;
+
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+
+.progress-indeterminate {
+    width: 35%;
+
+    animation:
+        progress-indeterminate
+        1.2s
+        ease-in-out
+        infinite;
+}
+
+
+@keyframes progress-indeterminate {
+
+    from {
+        transform: translateX(-110%);
+    }
+
+    to {
+        transform: translateX(300%);
+    }
+
+}
+
+
+@media (max-width: 700px) {
+
+    .download-actions {
+        grid-template-columns: 1fr;
+    }
+
+
+    .info-header {
+        flex-direction: column;
+    }
+
+
+    .video-thumbnail {
+        width: 190px;
+        max-width: 36%;
+
+        aspect-ratio: 16 / 9;
+
+        object-fit: contain;
+        object-position: center;
+
+        background: #000;
+
+        border-radius: 7px;
+
+        flex-shrink: 0;
+    }
+}
+/* =========================================================
+   Import Video List
+   ========================================================= */
+
+.import-section {
+    margin-top: 24px;
+    padding: 20px;
+
+    background: #111827;
+
+    border: 1px solid #2a3441;
+    border-radius: 12px;
+}
+
+.import-section h2 {
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+
+#importText {
+    width: 100%;
+    min-height: 220px;
+
+    box-sizing: border-box;
+
+    margin-top: 14px;
+    margin-bottom: 14px;
+
+    padding: 14px 16px;
+
+    background: #0b1220;
+
+    color: #e5e7eb;
+
+    border: 1px solid #374151;
+    border-radius: 10px;
+
+    font-family:
+        "Consolas",
+        "Courier New",
+        monospace;
+
+    font-size: 14px;
+    line-height: 1.5;
+
+    resize: vertical;
+
+    outline: none;
+
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease,
+        background 0.15s ease;
+}
+
+#importText::placeholder {
+    color: #6b7280;
+}
+
+#importText:hover {
+    border-color: #4b5563;
+}
+
+#importText:focus {
+    background: #0d1525;
+
+    border-color: #3b82f6;
+
+    box-shadow:
+        0 0 0 3px
+        rgba(59, 130, 246, 0.15);
+}
+
+#importText::-webkit-scrollbar {
+    width: 10px;
+}
+
+#importText::-webkit-scrollbar-track {
+    background: #0b1220;
+
+    border-radius: 10px;
+}
+
+#importText::-webkit-scrollbar-thumb {
+    background: #374151;
+
+    border-radius: 10px;
+
+    border: 2px solid #0b1220;
+}
+
+#importText::-webkit-scrollbar-thumb:hover {
+    background: #4b5563;
+}
+
+
+/* =========================================================
+   Import buttons
+   ========================================================= */
+
+.import-section .video-actions {
+    display: flex;
+    flex-wrap: wrap;
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+}
+
+
+/* =========================================================
+   Parsed video results
+   ========================================================= */
+
+.import-results {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 14px;
+}
+
+.import-video {
+    display: flex;
+    align-items: center;
+
+    gap: 12px;
+
+    padding: 12px 14px;
+}
+
+.import-video .video-information {
+    flex: 1;
+
+    min-width: 0;
+}
+
+.import-video .video-title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   Checkbox
+   ========================================================= */
+
+.import-video input[type="checkbox"] {
+    width: 19px;
+    height: 19px;
+
+    margin: 0;
+
+    flex-shrink: 0;
+
+    cursor: pointer;
+
+    accent-color: #3b82f6;
+}
+
+
+/* =========================================================
+   Mobile
+   ========================================================= */
+
+@media (max-width: 650px) {
+    .import-section {
+        padding: 14px;
+    }
+
+    #importText {
+        min-height: 180px;
+
+        font-size: 13px;
+    }
+
+    .import-video {
+        align-items: flex-start;
+        flex-wrap: wrap;
+    }
+
+    .import-video .video-information {
+        flex-basis: calc(100% - 35px);
+    }
+
+    .import-video > button {
+        width: 100%;
+    }
+
+    .import-section .video-actions button {
+        flex: 1 1 140px;
+    }
+}
